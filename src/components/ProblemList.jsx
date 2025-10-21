@@ -37,7 +37,7 @@ function ActivityCalendar({ solvedDates, contestDates }) {
   const firstDayIndex = startOfMonth(currentMonth).getDay();
 
   return (
-    <div className="bg-gray-900 p-4 rounded-xl border border-gray-800 text-gray-200">
+    <div className="bg-gray-900 p-4 rounded-xl border border-gray-800 text-gray-200 ">
       {/* Header: Month + Navigation */}
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-lg font-semibold">Activity</h3>
@@ -142,7 +142,7 @@ export default function ProblemList() {
   });
 
   return (
-    <div className="min-h-screen bg-[#0d1117] text-white flex">
+    <div className="min-h-screen bg-[#0d1117] text-white flex pt-20">
       {/* Sidebar Filters + Calendar */}
       <aside className="hidden lg:block w-1/4 bg-[#161b22] border-r border-gray-800 p-6 space-y-8">
         {/* Difficulty Filter */}

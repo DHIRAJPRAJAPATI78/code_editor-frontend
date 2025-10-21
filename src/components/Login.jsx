@@ -1,7 +1,16 @@
-import { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser, registerUser, reset } from "../features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { isLoading, isError, isSuccess, message,user } = useSelector(
+    (state) => state.auth
+  );
+
   const [activeTab, setActiveTab] = useState("login");
   const [formData, setFormData] = useState({
     firstName: "",
@@ -9,53 +18,35 @@ export default function Login() {
     email: "",
     password: "",
   });
-  const [message, setMessage] = useState("");
 
-  // Form handlers
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setMessage("");
-    try {
-      const url = activeTab === "login" ? "/api/login" : "/api/register";
-      const res = await axios.post(url, formData, { withCredentials: true });
-      setMessage(res.data.message);
-    } catch (err) {
-      setMessage(err.response?.data?.message || "Something went wrong");
+    if (activeTab === "login") {
+      dispatch(loginUser(formData));
+    } else {
+      dispatch(registerUser(formData));
     }
   };
+
+  useEffect(() => {
+    // Reset after showing message
+  if(user){
+    navigate("/");
+  }
+    if (isSuccess || isError) {
+      const timeout = setTimeout(() => dispatch(reset()), 3000);
+      return () => clearTimeout(timeout);
+    }
+    
+  }, [isSuccess, isError, dispatch]);
 
   return (
     <div className='relative min-h-screen flex flex-col md:flex-row bg-gradient-to-b from-black via-gray-900 to-gray-950 text-white overflow-hidden'>
       <div className='flex-1 flex items-center justify-center p-6 md:p-12'>
         <div className='w-full max-w-md bg-gradient-to-br from-purple-600/20 to-purple-900/10 backdrop-blur-lg rounded-2xl shadow-lg p-8 border border-purple-500/30'>
-          {/* Tabs */}
-          <div className='flex justify-center mb-6'>
-            <button
-              onClick={() => setActiveTab("login")}
-              className={`w-1/2 py-2 font-semibold rounded-l-lg transition-all ${
-                activeTab === "login"
-                  ? "bg-purple-600 text-white"
-                  : "bg-gray-800 text-gray-400 hover:text-white"
-              }`}
-            >
-              Login
-            </button>
-            <button
-              onClick={() => setActiveTab("register")}
-              className={`w-1/2 py-2 font-semibold rounded-r-lg transition-all ${
-                activeTab === "register"
-                  ? "bg-purple-600 text-white"
-                  : "bg-gray-800 text-gray-400 hover:text-white"
-              }`}
-            >
-              Register
-            </button>
-          </div>
-
-          {/* Form */}
           <form onSubmit={handleSubmit} className='space-y-4'>
             {activeTab === "register" && (
               <>
@@ -111,9 +102,14 @@ export default function Login() {
 
             <button
               type='submit'
+              disabled={isLoading}
               className='w-full py-2 mt-4 bg-gradient-to-r from-purple-500 to-purple-700 rounded-lg font-semibold hover:scale-[1.02] transition-transform duration-300 shadow-lg shadow-purple-800/30'
             >
-              {activeTab === "login" ? "Enter Codex →" : "Join Codex →"}
+              {isLoading
+                ? "Processing..."
+                : activeTab === "login"
+                ? "Login"
+                : "Register"}
             </button>
           </form>
 
@@ -149,7 +145,6 @@ export default function Login() {
         </div>
       </div>
 
-      {/* Footer */}
       <div className='absolute bottom-4 w-full text-center text-sm text-gray-500'>
         © {new Date().getFullYear()} Codex — Code. Compete. Create.
       </div>

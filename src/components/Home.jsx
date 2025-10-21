@@ -81,7 +81,7 @@ export default function Home() {
   }, [visibleText]);
 
   return (
-    <div className='relative min-h-screen flex flex-col lg:flex-row bg-gradient-to-b from-black via-gray-900 to-gray-950 text-white overflow-hidden'>
+    <div className='relative min-h-screen flex flex-col lg:flex-row bg-gradient-to-b from-black via-gray-900 to-gray-950 text-white overflow-hidden pt-20'>
       {/* RIGHT SIDE — Hero Section */}
       <div className='flex-1 flex flex-col justify-center items-center text-center px-6 md:px-16 py-12'>
         <p className='italic text-2xl md:text-3xl font-bold  leading-tight drop-shadow-lg'>

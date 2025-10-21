@@ -1,21 +1,19 @@
 import { useEffect, useState, useRef } from "react";
 import { Menu, X, Bell, Moon } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [user, setUser] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  useEffect(() => {
-    // Simulate logged-in user
-    setUser({
-      name: "Dhiraj",
-      avatar: "https://i.pravatar.cc/40?img=68",
-    });
-  }, []);
+  // ✅ Get user from Redux
+  const { user} = useSelector((state) => state.auth);
 
-  // Close dropdown when clicked outside
+
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -26,83 +24,84 @@ const Header = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // ✅ Navigation links
   const navLinks = [
-    { name: "Problems", href: "#problems" },
-    { name: "Contests", href: "#contests" },
-    { name: "Leaderboard", href: "#leaderboard" },
-    { name: "Discuss", href: "#discuss" },
-    { name: "Settings", href: "#Settings", type: "mobile" },
-    { name: "Logout", href: "#Logout", type: "mobile" },
-    { name: "Submissions", href: "#Submissions", type: "mobile" },
-    { name: "My Profile", href: "#My Profile", type: "mobile" },
+    { name: "Problems", href: "/problems" },
+    { name: "Contests", href: "/contests" },
+    { name: "Leaderboard", href: "/leaderboard" },
+    { name: "Settings", href: "/settings", type: "mobile" },
+    { name: "Logout", href: "/logout", type: "mobile" },
+    { name: "Submissions", href: "/submissions", type: "mobile" },
+    { name: "My Profile", href: "/profile", type: "mobile" },
   ];
 
+
+
   return (
-    <header className='fixed top-0 left-0 w-full bg-black/80 backdrop-blur-md border-b border-gray-800 z-50'>
-      <div className='max-w-7xl mx-auto px-5 py-3 flex items-center justify-between'>
+    <header className="fixed top-0 left-0 w-full bg-black/80 backdrop-blur-md border-b border-gray-800 z-50">
+      <div className="max-w-7xl mx-auto px-5 py-3 flex items-center justify-between">
         {/* Logo */}
-        <div className='text-2xl font-bold text-white cursor-pointer tracking-wide'>
+        <div className="text-2xl font-bold text-white cursor-pointer tracking-wide">
           Codex
         </div>
 
         {/* Desktop Navigation */}
-        <nav className='hidden md:flex items-center space-x-6 text-gray-300'>
+        <nav className="hidden md:flex items-center space-x-6 text-gray-300">
           {navLinks.map(
             (link) =>
-              link.type != "mobile" && (
-                <a
+              link.type !== "mobile" && (
+                <Link
                   key={link.name}
-                  href={link.href}
-                  className='hover:text-white transition duration-200'
+                  to={link.href}
+                  className="hover:text-white transition duration-200"
                 >
                   {link.name}
-                </a>
+                </Link>
               )
           )}
         </nav>
 
         {/* Right Section */}
-        <div className='hidden md:flex items-center space-x-4'>
+        <div className="hidden md:flex items-center space-x-4">
           {user ? (
             <>
-              <button className='text-gray-300 hover:text-white'>
+              <button className="text-gray-300 hover:text-white">
                 <Bell size={20} />
               </button>
-              <button className='text-gray-300 hover:text-white'>
+              <button className="text-gray-300 hover:text-white">
                 <Moon size={20} />
               </button>
 
               {/* User Dropdown */}
-              <div className='relative' ref={dropdownRef}>
+              <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setDropdownOpen((prev) => !prev)}
-                  className='flex items-center focus:outline-none'
+                  className="flex items-center focus:outline-none"
                 >
                   <img
-                    src={user.avatar}
-                    alt='User avatar'
-                    className='w-10 h-10 rounded-full border border-gray-700 cursor-pointer'
+                    src={`https://ui-avatars.com/api/?name=${user.firstName}+${user.lastName}&background=random`}
+                    alt="User avatar"
+                    className="w-10 h-10 rounded-full border border-gray-700 cursor-pointer"
                   />
                 </button>
 
                 {dropdownOpen && (
-                  <div className='absolute right-0 mt-2 w-44 bg-gray-900 border border-gray-800 rounded-lg shadow-lg z-50'>
-                    <div className='px-4 py-2 text-gray-200 border-b border-gray-700'>
-                      Hello, {user.name}
+                  <div className="absolute right-0 mt-2 w-44 bg-gray-900 border border-gray-800 rounded-lg shadow-lg z-50">
+                    <div className="px-4 py-2 text-gray-200 border-b border-gray-700">
+                      Hello, {user.firstName}
                     </div>
-                    <ul className='text-gray-300'>
-                      <li className='px-4 py-2 hover:bg-gray-800 cursor-pointer'>
+                    <ul className="text-gray-300">
+                      <li className="px-4 py-2 hover:bg-gray-800 cursor-pointer">
                         My Profile
                       </li>
-                      <li className='px-4 py-2 hover:bg-gray-800 cursor-pointer'>
+                      <li className="px-4 py-2 hover:bg-gray-800 cursor-pointer">
                         Submissions
                       </li>
-                      <li className='px-4 py-2 hover:bg-gray-800 cursor-pointer'>
+                      <li className="px-4 py-2 hover:bg-gray-800 cursor-pointer">
                         Settings
                       </li>
                       <li
-                        className='px-4 py-2 hover:bg-gray-800 cursor-pointer text-red-400'
-                        onClick={() => setUser(null)}
+                        className="px-4 py-2 hover:bg-gray-800 cursor-pointer text-red-400"
                       >
                         Logout
                       </li>
@@ -113,12 +112,12 @@ const Header = () => {
             </>
           ) : (
             <>
-              <button className='px-4 py-2 rounded-lg border border-gray-600 text-gray-200 hover:bg-white hover:text-black transition duration-200'>
+               <Link
+                to="/login"
+                className='px-8 py-3 bg-gradient-to-r from-purple-500 to-purple-700 rounded-lg font-semibold hover:scale-[1.03] transition-transform duration-300 shadow-lg shadow-purple-800/30'
+              >
                 Login
-              </button>
-              <button className='px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition duration-200'>
-                Signup
-              </button>
+              </Link>
             </>
           )}
         </div>
@@ -126,7 +125,7 @@ const Header = () => {
         {/* Mobile Menu Toggle */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className='md:hidden text-gray-200'
+          className="md:hidden text-gray-200"
         >
           {menuOpen ? <X size={26} /> : <Menu size={26} />}
         </button>
@@ -134,35 +133,37 @@ const Header = () => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className='md:hidden bg-black/90 border-t border-gray-800 px-5 py-4 flex flex-col space-y-4 text-gray-300'>
+        <div className="md:hidden bg-black/90 border-t border-gray-800 px-5 py-4 flex flex-col space-y-4 text-gray-300">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.name}
-              href={link.href}
-              className='hover:text-white transition duration-200'
+              to={link.href}
+              className="hover:text-white transition duration-200"
               onClick={() => setMenuOpen(false)}
             >
               {link.name}
-            </a>
+            </Link>
           ))}
 
           {user ? (
-            <div className='flex items-center space-x-3 border-t border-gray-800 pt-3'>
+            <div className="flex items-center space-x-3 border-t border-gray-800 pt-3">
               <img
-                src={user.avatar}
-                alt='User avatar'
-                className='w-10 h-10 rounded-full border border-gray-700'
+                src={`https://ui-avatars.com/api/?name=${user.firstName}+${user.lastName}&background=random`}
+                alt="User avatar"
+                className="w-10 h-10 rounded-full border border-gray-700"
               />
-              <span className='text-gray-100 font-medium'>{user.name}</span>
+              <span className="text-gray-100 font-medium">
+                {user.firstName} {user.lastName}
+              </span>
             </div>
           ) : (
             <>
-              <button className='w-full px-4 py-2 rounded-lg border border-gray-600 text-gray-200 hover:bg-white hover:text-black transition duration-200'>
+              <Link
+                to="/login"
+                className='px-8 py-3 bg-gradient-to-r from-purple-500 to-purple-700 rounded-lg font-semibold hover:scale-[1.03] transition-transform duration-300 shadow-lg shadow-purple-800/30'
+              >
                 Login
-              </button>
-              <button className='w-full px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition duration-200'>
-                Signup
-              </button>
+              </Link>
             </>
           )}
         </div>
