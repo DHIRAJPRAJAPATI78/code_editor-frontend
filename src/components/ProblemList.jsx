@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, addMonths, subMonths } from "date-fns";
+import { getProblemList } from "../features/Problem/problemSlice"; 
 
-// Single-Month Activity Calendar Component
+// --- ACTIVITY CALENDAR COMPONENT ---
 function ActivityCalendar({ solvedDates, contestDates }) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [streak, setStreak] = useState(0);
-
   const today = new Date();
 
   // Calculate streak
   useEffect(() => {
+    if (!solvedDates.length) return;
     const sorted = [...solvedDates].sort((a, b) => new Date(b) - new Date(a));
     let count = 0;
     let prev = new Date(sorted[0]);
@@ -37,8 +39,8 @@ function ActivityCalendar({ solvedDates, contestDates }) {
   const firstDayIndex = startOfMonth(currentMonth).getDay();
 
   return (
-    <div className="bg-gray-900 p-4 rounded-xl border border-gray-800 text-gray-200 ">
-      {/* Header: Month + Navigation */}
+    <div className="bg-gray-900 p-4 rounded-xl border border-gray-800 text-gray-200">
+      {/* Header */}
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-lg font-semibold">Activity</h3>
         <div className="text-sm text-green-400 font-medium">🔥 {streak} Day Streak</div>
@@ -62,8 +64,8 @@ function ActivityCalendar({ solvedDates, contestDates }) {
 
       {/* Days of Week */}
       <div className="grid grid-cols-7 text-center mb-1 text-gray-400 text-xs">
-        {["S", "M", "T", "W", "T", "F", "S"].map((d) => (
-          <div key={d}>{d}</div>
+        {["S", "M", "T", "W", "T", "F", "S"].map((d,i) => (
+          <div key={d+i}>{d}</div>
         ))}
       </div>
 
@@ -118,23 +120,27 @@ function ActivityCalendar({ solvedDates, contestDates }) {
   );
 }
 
+// --- MAIN PROBLEM LIST COMPONENT ---
 export default function ProblemList() {
-  const [problems, setProblems] = useState([
-    { _id: "1", title: "Two Sum", tags: ["array", "hashmap"], difficulty: "easy" },
-    { _id: "2", title: "Median of Two Sorted Arrays", tags: ["array", "binary search"], difficulty: "hard" },
-    { _id: "3", title: "Longest Substring Without Repeating Characters", tags: ["string", "sliding window"], difficulty: "medium" },
-  ]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
+  const { problems, isLoading, isError, message } = useSelector((state) => state.problem);
+
   const [search, setSearch] = useState("");
   const [filterDifficulty, setFilterDifficulty] = useState("all");
   const [selectedTag, setSelectedTag] = useState(null);
-  // const navigate = useNavigate();
 
+  // Example static activity data (can be fetched from API later)
   const solvedDates = ["2025-10-14", "2025-10-17", "2025-10-19"];
   const contestDates = ["2025-10-21", "2025-10-27"];
 
-  const filteredProblems = problems.filter((p) => {
+  // ✅ Fetch problems from API on mount
+  useEffect(() => {
+    dispatch(getProblemList());
+  }, [dispatch]);
+
+  const filteredProblems = problems?.filter((p) => {
     const matchSearch = p.title.toLowerCase().includes(search.toLowerCase());
     const matchDiff = filterDifficulty === "all" || p.difficulty === filterDifficulty;
     const matchTag = !selectedTag || p.tags.includes(selectedTag);
@@ -143,7 +149,7 @@ export default function ProblemList() {
 
   return (
     <div className="min-h-screen bg-[#0d1117] text-white flex pt-20">
-      {/* Sidebar Filters + Calendar */}
+      {/* Sidebar */}
       <aside className="hidden lg:block w-1/4 bg-[#161b22] border-r border-gray-800 p-6 space-y-8">
         {/* Difficulty Filter */}
         <div>
@@ -183,7 +189,7 @@ export default function ProblemList() {
         <ActivityCalendar solvedDates={solvedDates} contestDates={contestDates} />
       </aside>
 
-      {/* Main Content */}
+      {/* Main Section */}
       <main className="flex-1 p-6 md:p-10">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
           <h2 className="text-3xl font-bold">Problem Set</h2>
@@ -199,8 +205,11 @@ export default function ProblemList() {
           </div>
         </div>
 
-        {loading ? (
+        {/* Loading/Error/Empty States */}
+        {isLoading ? (
           <p className="text-center text-gray-400 animate-pulse">Loading problems...</p>
+        ) : isError ? (
+          <p className="text-center text-red-400">{message}</p>
         ) : filteredProblems.length === 0 ? (
           <p className="text-center text-gray-400 mt-10">No problems found.</p>
         ) : (

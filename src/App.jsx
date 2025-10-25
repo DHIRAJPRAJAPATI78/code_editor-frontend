@@ -6,6 +6,8 @@ import { Provider } from "react-redux";
 import { store } from "./app/store.js";
 import Body from "./components/Body.jsx";
 import contest from "./components/contest.jsx";
+import ProblemList from "./components/ProblemList.jsx";
+
 
 const App = () => {
   return (
@@ -16,7 +18,8 @@ const App = () => {
             <Route path='/' element={<Body />}>
               <Route path='/' element={<Home />} />
               <Route path='/login' element={<Login />} />
-              <Route path='/problems' element={<ProblemPage />} />
+              <Route path='/problems' element={<ProblemList />} />
+              <Route path='/problems/:id' element={<ProblemPage />} />
               <Route path='/contests' element={contest} />
               <Route path='*' element={<h2>404 - Page Not Found</h2>} />
             </Route>
