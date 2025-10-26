@@ -1,4 +1,7 @@
+// 
+
 import { useEffect, useState, useRef } from "react";
+import { Play, Pause, RotateCcw } from "lucide-react";
 
 export default function Timer() {
   const [seconds, setSeconds] = useState(0);
@@ -40,32 +43,42 @@ export default function Timer() {
   };
 
   return (
-    <div className="flex items-center gap-3 text-gray-300 text-sm font-medium">
-      <span className="font-mono text-purple-400">⏱ {formatTime(seconds)}</span>
+   <div className="flex items-center gap-2">
+  {/* Timer Display - LeetCode Style */}
+  <div className="flex items-center gap-2 bg-transparent rounded-lg px-3 py-1.5 min-w-[80px] justify-center">
+    <span className="font-mono text-sm font-medium text-gray-700 dark:text-gray-300 tracking-wide">
+      {formatTime(seconds)}
+    </span>
+  </div>
 
-      <div className="flex items-center gap-1">
-        {isRunning ? (
-          <button
-            onClick={stopTimer}
-            className="px-2 py-1 text-xs rounded bg-red-600/30 hover:bg-red-600/50 transition-all"
-          >
-            Stop
-          </button>
-        ) : (
-          <button
-            onClick={startTimer}
-            className="px-2 py-1 text-xs rounded bg-green-600/30 hover:bg-green-600/50 transition-all"
-          >
-            Start
-          </button>
-        )}
-        <button
-          onClick={resetTimer}
-          className="px-2 py-1 text-xs rounded bg-gray-600/30 hover:bg-gray-600/50 transition-all"
-        >
-          Reset
-        </button>
-      </div>
-    </div>
+  {/* Control Buttons - LeetCode Style */}
+  <div className="flex items-center gap-1">
+    {isRunning ? (
+      <button
+        onClick={stopTimer}
+        className="p-1.5 rounded text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+        title="Pause Timer"
+      >
+        <Pause className="w-3.5 h-3.5" />
+      </button>
+    ) : (
+      <button
+        onClick={startTimer}
+        className="p-1.5 rounded text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+        title="Start Timer"
+      >
+        <Play className="w-3.5 h-3.5" />
+      </button>
+    )}
+    
+    <button
+      onClick={resetTimer}
+      className="p-1.5 rounded text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+      title="Reset Timer"
+    >
+      <RotateCcw className="w-3.5 h-3.5" />
+    </button>
+  </div>
+</div>
   );
 }

@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "../features/auth/authSlice";
 import problemReducer from "../features/Problem/problemSlice";
-import subbmissionReducer from "../features/submission/submissionSlice";
+import runReducer from "../features/Submission/submissionSlice";
+import subbmissionReducer from "../features/submit/submitSlice";
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     problem:problemReducer,
-    submission:subbmissionReducer
+    run:runReducer,
+    submission: subbmissionReducer,
   },
 });

@@ -4,10 +4,11 @@ import { submitCodeService } from "./submissionService";
 
 
 export const submitCode = createAsyncThunk(
-  "submission/submitCode",
+  "run/runCode",
   async ({ problemId, language, code }, thunkAPI) => {
     try {
       const response = await submitCodeService(problemId, language, code);
+      console.log(response);
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(
@@ -18,7 +19,7 @@ export const submitCode = createAsyncThunk(
 );
 
 const submissionSlice = createSlice({
-  name: "submission",
+  name: "run",
   initialState: {
     data: null,
     loading: false,
@@ -41,7 +42,7 @@ const submissionSlice = createSlice({
       })
       .addCase(submitCode.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload.data;
+        state.data = action.payload;
         state.message = action.payload.message;
       })
       .addCase(submitCode.rejected, (state, action) => {
