@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { submitCodeService } from "./submissionService";
 
 
-export const submitCode = createAsyncThunk(
+export const runCode = createAsyncThunk(
   "run/runCode",
   async ({ problemId, language, code }, thunkAPI) => {
     try {
@@ -36,16 +36,16 @@ const submissionSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(submitCode.pending, (state) => {
+      .addCase(runCode.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(submitCode.fulfilled, (state, action) => {
+      .addCase(runCode.fulfilled, (state, action) => {
         state.loading = false;
         state.data = action.payload;
         state.message = action.payload.message;
       })
-      .addCase(submitCode.rejected, (state, action) => {
+      .addCase(runCode.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

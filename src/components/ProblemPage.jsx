@@ -12,10 +12,11 @@ import {
 } from "lucide-react";
 import { getProblemById } from "../features/Problem/problemSlice";
 import {
-  submitCode,
+  runCode,
   resetSubmission,
 } from "../features/Submission/submissionSlice";
-
+import CustomModal from "../utils/CustomModal";
+import { submitCode } from "../features/submit/submitSlice";
 const ProblemPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -38,45 +39,89 @@ const ProblemPage = () => {
   const [openSolutions, setOpenSolutions] = useState({});
   const [leftPanelWidth, setLeftPanelWidth] = useState(450);
   const [testPanelOpen, setTestPanelOpen] = useState(true);
-  const [outputPanelOpen, setOutputPanelOpen] = useState(false);
+  const [hasRun, setHasRun] = useState(false);
+
+  // Modal state
+  const [modal, setModal] = useState({
+    isOpen: false,
+    title: "",
+    message: "",
+    type: "success",
+  });
 
   useEffect(() => {
     if (id) {
       dispatch(getProblemById(id));
       dispatch(resetSubmission());
-      setOutputPanelOpen(false);
       setActiveTest(0);
+      setHasRun(false);
     }
   }, [dispatch, id]);
 
   const handleRunCode = async () => {
-    if (!id) return alert("Problem not found");
-    setOutputPanelOpen(true);
+    if (!id)
+      return setModal({
+        isOpen: true,
+        title: "Error",
+        message: "Problem not found!",
+        type: "error",
+      });
+
     dispatch(resetSubmission());
-    dispatch(submitCode({ problemId: id, language, code }));
+    dispatch(runCode({ problemId: id, language, code }));
+    setHasRun(true);
   };
 
   const handleSubmit = async () => {
-    if (!id) return alert("Problem not found");
-    try {
-      setIsSubmitting(true);
-      dispatch(resetSubmission());
-      const resultAction = dispatch(
-        submitCode({ problemId: id, language, code })
-      );
-      if (submitCode.fulfilled.match(resultAction)) {
-        alert(resultAction.payload.message || "Code submitted successfully!");
-        setActiveTab("submission");
-      } else {
-        alert(resultAction.payload || "Submission failed");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Submission failed");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  if (!id) {
+    return setModal({
+      isOpen: true,
+      title: "Error",
+      message: "Problem not found!",
+      type: "error",
+    });
+  }
+
+  if (!hasRun) {
+    return setModal({
+      isOpen: true,
+      title: "Warning",
+      message: "Please run the code before submitting!",
+      type: "error",
+    });
+  }
+
+  try {
+    setIsSubmitting(true);
+    dispatch(resetSubmission());
+
+    // ✅ Dispatch and unwrap the result
+    const payload = await dispatch(
+      submitCode({ problemId: id, language, code })
+    ).unwrap();
+
+    // Success modal
+    setModal({
+      isOpen: true,
+      title: "Success",
+      message: payload?.message || "Code submitted successfully!",
+      type: "success",
+    });
+
+    setActiveTab("submission");
+  } catch (err) {
+    console.error(err);
+    setModal({
+      isOpen: true,
+      title: "Error",
+      message: err?.message || "Submission failed due to a network or server error.",
+      type: "error",
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   const handleLeftResize = (e) => {
     e.preventDefault();
@@ -423,6 +468,15 @@ const ProblemPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Custom Modal */}
+      <CustomModal
+        isOpen={modal.isOpen}
+        onClose={() => setModal({ ...modal, isOpen: false })}
+        title={modal.title}
+        message={modal.message}
+        type={modal.type}
+      />
     </div>
   );
 };
