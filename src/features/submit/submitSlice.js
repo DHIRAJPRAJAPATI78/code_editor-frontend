@@ -8,8 +8,9 @@ export const submitCode = createAsyncThunk(
     try {
       return await submitService.submitCode({ problemId, language, code, contestId });
     } catch (error) {
+      console.log(error);
       const message =
-        error.response?.data?.error || error.message || "Submission failed";
+        error.response?.data?.message || error.message || "Submission failed";
       return thunkAPI.rejectWithValue(message);
     }
   }

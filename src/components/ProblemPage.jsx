@@ -17,6 +17,7 @@ import {
 } from "../features/Submission/submissionSlice";
 import CustomModal from "../utils/CustomModal";
 import { submitCode } from "../features/submit/submitSlice";
+import SubmissionTab from "./SubmissionTab";
 const ProblemPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -186,12 +187,12 @@ const ProblemPage = () => {
         {error}
       </div>
     );
-  if (!currentProblem)
-    return (
-      <div className='min-h-screen flex items-center justify-center bg-[#0e1116] text-gray-400 text-xl'>
-        Problem not found.
-      </div>
-    );
+  // if (!currentProblem)
+  //   return (
+  //     <div className='min-h-screen flex items-center justify-center bg-[#0e1116] text-gray-400 text-xl'>
+  //       Problem not found.
+  //     </div>
+  //   );
 
   const problem = currentProblem.data || currentProblem;
   const tabs = [
@@ -329,6 +330,7 @@ const ProblemPage = () => {
               )}
             </div>
           )}
+          {activeTab === "submission" && <SubmissionTab problemId={id}/>}
         </div>
       </div>
 

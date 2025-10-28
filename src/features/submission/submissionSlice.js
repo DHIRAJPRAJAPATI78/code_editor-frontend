@@ -11,8 +11,9 @@ export const runCode = createAsyncThunk(
       console.log(response);
       return response;
     } catch (error) {
+      console.log(error);
       return thunkAPI.rejectWithValue(
-        error.response?.data?.error || "Submission failed"
+        error.response?.data?.message || "Submission failed"
       );
     }
   }
