@@ -8,6 +8,7 @@ import ProblemList from "./components/ProblemList";
 import ProblemPage from "./components/ProblemPage";
 import Contest from "./components/contest";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ProfilePage from "./components/ProfilePage";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
               <Route path="/problems" element={<ProblemList />} />
               <Route path="/problems/:id" element={<ProblemPage />} />
               <Route path="/contests" element={<Contest />} />
+              <Route path="/profile" element={<ProfilePage />} />
             </Route>
 
             <Route path="*" element={<h2>404 - Page Not Found</h2>} />

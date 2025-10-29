@@ -187,19 +187,19 @@ const ProblemPage = () => {
         {error}
       </div>
     );
-  // if (!currentProblem)
-  //   return (
-  //     <div className='min-h-screen flex items-center justify-center bg-[#0e1116] text-gray-400 text-xl'>
-  //       Problem not found.
-  //     </div>
-  //   );
+  if (!currentProblem)
+    return (
+      <div className='min-h-screen flex items-center justify-center bg-[#0e1116] text-gray-400 text-xl'>
+        Problem not found.
+      </div>
+    );
 
-  const problem = currentProblem.data || currentProblem;
+  const problem = currentProblem?.data || currentProblem;
   const tabs = [
     { id: "statement", label: "Statement" },
     { id: "editorial", label: "Editorial" },
     { id: "submission", label: "Submission" },
-    { id: "askai", label: "Ask AI" },
+    { id: "discussion", label: "Discussion" },
   ];
 
   return (
@@ -279,7 +279,7 @@ const ProblemPage = () => {
                     </p>
                     {test.explanation && (
                       <p className='text-sm text-gray-300 italic'>
-                        💡 {test.explanation}
+                        Explation : {test.explanation}
                       </p>
                     )}
                   </div>

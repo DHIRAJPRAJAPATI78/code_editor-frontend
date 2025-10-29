@@ -1,8 +1,8 @@
-import React from 'react'
+
 
 const contest = () => {
   return (
-    <div>contest</div>
+    <div className='pt-16'>contest</div>
   )
 }
 
