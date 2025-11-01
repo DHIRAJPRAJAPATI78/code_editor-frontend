@@ -1,166 +1,212 @@
 import { motion } from "framer-motion";
-import { Check } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useMemo } from "react";
+import { getAllSolvedProblems } from "../../features/solvedProblem/solvedSlice";
+import { Target, TrendingUp, Clock } from "lucide-react";
 
 export default function SolvedStats() {
-  const stats = {
-    solved: 213,
-    total: 3730,
-    easy: { solved: 87, total: 909 },
-    medium: { solved: 108, total: 1942 },
-    hard: { solved: 18, total: 879 },
-    attempting: 15,
-    acceptance: 46.54,
-  };
+  const dispatch = useDispatch();
 
-  const getPercentage = (s, t) => (s / t) * 100;
+  const { problems: solvedProblems, isLoading, isError, message } = useSelector(
+    (state) => state.solved
+  );
+  const { problems: totalProblems } = useSelector((state) => state.problem);
+
+  useEffect(() => {
+    dispatch(getAllSolvedProblems());
+  }, [dispatch]);
+
+  // ✅ Compute stats dynamically using Redux data
+  const stats = useMemo(() => {
+    const easyTotal = totalProblems.filter((p) => p.difficulty === "easy").length;
+    const mediumTotal = totalProblems.filter((p) => p.difficulty === "medium").length;
+    const hardTotal = totalProblems.filter((p) => p.difficulty === "hard").length;
+    const total = totalProblems.length;
+
+    const easySolved = solvedProblems.filter((p) => p.difficulty === "easy").length;
+    const mediumSolved = solvedProblems.filter((p) => p.difficulty === "medium").length;
+    const hardSolved = solvedProblems.filter((p) => p.difficulty === "hard").length;
+    const solved = solvedProblems.length;
+
+    const acceptance = total
+      ? ((solved / total) * 100).toFixed(2)
+      : "0.00";
+
+    return {
+      solved,
+      total,
+      easy: { solved: easySolved, total: easyTotal },
+      medium: { solved: mediumSolved, total: mediumTotal },
+      hard: { solved: hardSolved, total: hardTotal },
+      attempting: 15,
+      acceptance,
+    };
+  }, [solvedProblems, totalProblems]);
+
+  const getPercentage = (s, t) => (t === 0 ? 0 : (s / t) * 100);
   const mainPct = getPercentage(stats.solved, stats.total);
-  const radius = 60;
+  const radius = 55;
   const circumference = 2 * Math.PI * radius;
 
   const difficulties = [
-    { name: "Easy", color: "from-green-400 to-emerald-500", pct: getPercentage(stats.easy.solved, stats.easy.total) },
-    { name: "Medium", color: "from-yellow-400 to-amber-500", pct: getPercentage(stats.medium.solved, stats.medium.total) },
-    { name: "Hard", color: "from-red-500 to-pink-600", pct: getPercentage(stats.hard.solved, stats.hard.total) },
+    {
+      name: "Easy",
+      color: "from-green-400 to-emerald-500",
+      textColor: "text-green-400",
+      pct: getPercentage(stats.easy.solved, stats.easy.total),
+    },
+    {
+      name: "Medium",
+      color: "from-yellow-400 to-amber-500",
+      textColor: "text-yellow-400",
+      pct: getPercentage(stats.medium.solved, stats.medium.total),
+    },
+    {
+      name: "Hard",
+      color: "from-red-500 to-pink-600",
+      textColor: "text-red-400",
+      pct: getPercentage(stats.hard.solved, stats.hard.total),
+    },
   ];
 
+  if (isLoading)
+    return (
+      <div className="bg-[#1a1a1a] p-5 rounded-xl border border-[#2a2a2a] shadow-lg h-[400px] flex items-center justify-center text-gray-400">
+        Loading stats...
+      </div>
+    );
+
+  if (isError)
+    return (
+      <div className="bg-[#1a1a1a] p-5 rounded-xl border border-[#2a2a2a] shadow-lg h-[400px] flex items-center justify-center text-red-400">
+        {message || "Failed to load data"}
+      </div>
+    );
+
   return (
-    <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border border-gray-700/50 rounded-2xl shadow-2xl p-6 text-gray-100 flex flex-col items-center justify-center">
-      {/* Title */}
-      <h3 className="text-lg font-semibold mb-6">Overall Progress</h3>
-
-      {/* Center Ring */}
-      <div className="relative flex items-center justify-center w-[200px] h-[200px] mb-6">
-        <svg className="absolute inset-0 rotate-[-90deg]" viewBox="0 0 200 200">
-          <circle
-            cx="100"
-            cy="100"
-            r={radius}
-            stroke="rgba(255,255,255,0.1)"
-            strokeWidth="10"
-            fill="none"
-          />
-          <motion.circle
-            cx="100"
-            cy="100"
-            r={radius}
-            strokeWidth="10"
-            strokeLinecap="round"
-            strokeDasharray={circumference}
-            strokeDashoffset={circumference - (mainPct / 100) * circumference}
-            className="stroke-[url(#gradientMain)]"
-            initial={{ strokeDashoffset: circumference }}
-            animate={{ strokeDashoffset: circumference - (mainPct / 100) * circumference }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
-          />
-          <defs>
-            <linearGradient id="gradientMain" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#34d399" />
-              <stop offset="100%" stopColor="#10b981" />
-            </linearGradient>
-          </defs>
-        </svg>
-
-        {/* Center Text */}
-        <div className="absolute flex flex-col items-center justify-center">
-          <h1 className="text-3xl font-bold text-white">{stats.solved}</h1>
-          <p className="text-sm text-gray-400">of {stats.total}</p>
-          <div className="mt-2 flex items-center gap-1 text-emerald-400 text-xs">
-            <Check size={14} /> <span>Solved</span>
-          </div>
+    <div className="bg-[#1a1a1a] p-5 rounded-xl border border-[#2a2a2a] shadow-lg flex flex-col justify-between h-[400px]">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-base font-semibold text-white">Solved Problems</h3>
+        <div className="flex items-center gap-1.5 text-xs text-gray-400 bg-[#252525] px-2 py-0.5 rounded-md">
+          <Target size={13} />
+          <span>Overall Progress</span>
         </div>
       </div>
 
-      {/* Difficulty Rings */}
-      <div className="flex gap-4 flex-wrap justify-center w-full max-w-md">
-        {difficulties.map((item, i) => {
-          const pct = item.pct.toFixed(1);
-          const dash = (circumference * pct) / 100;
-          const gap = circumference - dash;
-          return (
+      {/* Main Circle */}
+      <div className="relative flex flex-col items-center justify-center flex-1">
+        <div className="relative w-[140px] h-[140px]">
+          <svg className="absolute inset-0 rotate-[-90deg]" viewBox="0 0 200 200">
+            <circle
+              cx="100"
+              cy="100"
+              r={radius}
+              stroke="rgba(255,255,255,0.1)"
+              strokeWidth="10"
+              fill="none"
+            />
+            <motion.circle
+              cx="100"
+              cy="100"
+              r={radius}
+              strokeWidth="10"
+              strokeLinecap="round"
+              strokeDasharray={circumference}
+              strokeDashoffset={circumference - (mainPct / 100) * circumference}
+              className="stroke-[#ffa116]"
+              initial={{ strokeDashoffset: circumference }}
+              animate={{
+                strokeDashoffset:
+                  circumference - (mainPct / 100) * circumference,
+              }}
+              transition={{ duration: 1.2, ease: "easeInOut" }}
+            />
+          </svg>
+
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
             <motion.div
-              key={item.name}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.2 }}
-              className="relative flex flex-col items-center"
+              className="text-md font-bold text-white"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.4, type: "spring" }}
             >
-              <div className="relative w-[90px] h-[90px]">
-                <svg
-                  className="rotate-[-90deg]"
-                  viewBox="0 0 100 100"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+              {stats.solved}
+            </motion.div>
+            <div className="text-xs text-gray-500 mt-1">Solved</div>
+            <div className="text-xs text-gray-500">of {stats.total}</div>
+          </div>
+        </div>
+
+        {/* Difficulty Rings */}
+        <div className="flex items-center justify-center gap-4 flex-wrap mt-1">
+          {difficulties.map((item) => (
+            <div key={item.name} className="text-center">
+              <div className="relative w-[65px] h-[65px] mx-auto mb-1">
+                <svg className="absolute inset-0 rotate-[-90deg]" viewBox="0 0 100 100">
                   <circle
                     cx="50"
                     cy="50"
                     r="40"
-                    stroke="rgba(255,255,255,0.1)"
-                    strokeWidth="6"
+                    stroke="rgba(255,255,255,0.08)"
+                    strokeWidth="7"
                     fill="none"
                   />
                   <motion.circle
                     cx="50"
                     cy="50"
                     r="40"
-                    strokeWidth="6"
+                    strokeWidth="7"
                     strokeLinecap="round"
-                    strokeDasharray={`${dash}, ${gap}`}
-                    initial={{ strokeDashoffset: circumference }}
-                    animate={{ strokeDashoffset: gap }}
-                    transition={{ duration: 1.4, ease: "easeInOut" }}
-                    className={`stroke-[url(#grad-${item.name})]`}
+                    strokeDasharray={2 * Math.PI * 40}
+                    strokeDashoffset={
+                      2 * Math.PI * 40 - (item.pct / 100) * (2 * Math.PI * 40)
+                    }
+                    className={`stroke-[url(#${item.name}-grad)]`}
+                    initial={{ strokeDashoffset: 2 * Math.PI * 40 }}
+                    animate={{
+                      strokeDashoffset:
+                        2 * Math.PI * 40 - (item.pct / 100) * (2 * Math.PI * 40),
+                    }}
+                    transition={{ duration: 1 }}
                   />
                   <defs>
-                    <linearGradient id={`grad-${item.name}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                      {item.name === "Easy" && (
-                        <>
-                          <stop offset="0%" stopColor="#34d399" />
-                          <stop offset="100%" stopColor="#059669" />
-                        </>
-                      )}
-                      {item.name === "Medium" && (
-                        <>
-                          <stop offset="0%" stopColor="#facc15" />
-                          <stop offset="100%" stopColor="#f59e0b" />
-                        </>
-                      )}
-                      {item.name === "Hard" && (
-                        <>
-                          <stop offset="0%" stopColor="#ef4444" />
-                          <stop offset="100%" stopColor="#be123c" />
-                        </>
-                      )}
+                    <linearGradient id={`${item.name}-grad`} x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stopColor={item.color.split(" ")[0].replace("from-", "")} />
+                      <stop offset="100%" stopColor={item.color.split(" ")[1].replace("to-", "")} />
                     </linearGradient>
                   </defs>
                 </svg>
-
-                {/* Label in Center */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-xs">
-                  <span
-                    className={`font-semibold ${
-                      item.name === "Easy"
-                        ? "text-green-400"
-                        : item.name === "Medium"
-                        ? "text-yellow-400"
-                        : "text-red-400"
-                    }`}
-                  >
-                    {item.name}
-                  </span>
-                  <span className="text-gray-300">{pct}%</span>
-                </div>
+                <span
+                  className={`absolute inset-0 flex items-center justify-center text-xs font-semibold ${item.textColor}`}
+                >
+                  {item.pct.toFixed(0)}%
+                </span>
               </div>
-            </motion.div>
-          );
-        })}
+              <p className={`text-xs ${item.textColor}`}>{item.name}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Footer */}
-      <div className="mt-6 text-sm text-gray-400 text-center">
-        Acceptance Rate:{" "}
-        <span className="text-emerald-400 font-semibold">{stats.acceptance}%</span> •{" "}
-        Attempting:{" "}
-        <span className="text-amber-400 font-semibold">{stats.attempting}</span>
+      <div className="mt-3 grid grid-cols-2 gap-3 text-center text-sm">
+        <div className="bg-[#252525] p-2.5 rounded-lg">
+          <div className="flex items-center justify-center gap-1.5 text-gray-400 text-xs mb-1">
+            <TrendingUp size={12} /> Acceptance Rate
+          </div>
+          <div className="text-lg font-semibold text-[#ffa116]">
+            {stats.acceptance}%
+          </div>
+        </div>
+        <div className="bg-[#252525] p-2.5 rounded-lg">
+          <div className="flex items-center justify-center gap-1.5 text-gray-400 text-xs mb-1">
+            <Clock size={12} /> Attempting
+          </div>
+          <div className="text-lg font-semibold text-[#00c853]">
+            {stats.attempting}
+          </div>
+        </div>
       </div>
     </div>
   );
