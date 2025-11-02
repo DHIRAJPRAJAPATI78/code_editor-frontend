@@ -6,7 +6,7 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import ProblemList from "./components/ProblemList";
 import ProblemPage from "./components/ProblemPage";
-import Contest from "./components/contest";
+import Contest from "./components/ContestsPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ProfilePage from "./components/ProfilePage";
 import UpdateProfile from "./components/profile _components/updateProfile";

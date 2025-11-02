@@ -5,6 +5,7 @@ import runReducer from "../features/Submission/submissionSlice";
 import subbmissionReducer from "../features/submit/submitSlice";
 import profileReducer from "../features/profile/profileSlice";
 import solvedReducer from "../features/solvedProblem/solvedSlice";
+import contestReducer from "../features/contest/contestSlice";
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -13,5 +14,6 @@ export const store = configureStore({
     submission: subbmissionReducer,
     profile: profileReducer,  
     solved: solvedReducer,
+    contest:contestReducer
   },
 });
