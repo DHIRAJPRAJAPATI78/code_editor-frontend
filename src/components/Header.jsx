@@ -11,7 +11,7 @@ const Header = () => {
   const dropdownRef = useRef(null);
 
   // ✅ Get user from Redux
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.profile);
 
   // ✅ Close dropdown when clicking outside
   useEffect(() => {
@@ -64,7 +64,7 @@ const Header = () => {
 
         {/* Right Section */}
         <div className="hidden md:flex items-center space-x-4">
-          {user ? (
+          {user && (
             <>
               <button
                 className="text-gray-300 hover:text-white transition"
@@ -116,14 +116,7 @@ const Header = () => {
                 )}
               </div>
             </>
-          ) : (
-            <Link
-              to="/login"
-              className="px-6 py-2 bg-gradient-to-r from-purple-500 to-purple-700 rounded-lg font-semibold text-white hover:scale-[1.03] transition-transform duration-300 shadow-lg shadow-purple-800/30"
-            >
-              Login
-            </Link>
-          )}
+          ) }
         </div>
 
         {/* Mobile Menu Toggle */}

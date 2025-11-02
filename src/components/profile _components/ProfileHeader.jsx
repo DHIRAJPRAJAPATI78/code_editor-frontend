@@ -3,6 +3,7 @@ import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserProfile } from "../../features/profile/profileSlice";
 import { Edit3, Calendar, User, Mail } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function ProfileSidebar() {
   const dispatch = useDispatch();
@@ -139,12 +140,12 @@ export default function ProfileSidebar() {
           {user.bio}
         </p>
       )}
-
-      <button className="mt-5 bg-[#FFA116] text-black font-semibold py-2 rounded-lg hover:bg-[#ff8c00] transition flex items-center justify-center gap-2">
-        <Edit3 size={16} />
+    
+<Link to="/profile/update" className="mt-5 bg-[#FFA116] text-black font-semibold py-2 rounded-lg hover:bg-[#ff8c00] transition flex items-center justify-center gap-2">
+        <Edit3 size={16}  />
         Edit Profile
-      </button>
-
+</Link>
+      
       {/* Divider */}
       <div className="my-5 h-px w-full bg-[#2A2A2A]"></div>
 

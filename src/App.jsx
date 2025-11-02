@@ -9,11 +9,16 @@ import ProblemPage from "./components/ProblemPage";
 import Contest from "./components/contest";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ProfilePage from "./components/ProfilePage";
+import UpdateProfile from "./components/profile _components/updateProfile";
+import { Toaster } from "react-hot-toast";
+
 
 const App = () => {
+
   return (
     <Provider store={store}>
       <Router>
+        <Toaster/>
         <Routes>
           <Route path="/" element={<Body />}>
             <Route index element={<Home />} />
@@ -25,6 +30,8 @@ const App = () => {
               <Route path="/problems/:id" element={<ProblemPage />} />
               <Route path="/contests" element={<Contest />} />
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/profile/update" element={<UpdateProfile />} />
+              
             </Route>
 
             <Route path="*" element={<h2>404 - Page Not Found</h2>} />

@@ -6,7 +6,7 @@ const API_URL = "http://localhost:3000/user/profile";
 // ✅ Fetch logged-in user's profile
 const getUserProfile = async () => {
   const { data } = await axios.get(API_URL, { withCredentials: true });
-  return data.user; // Assuming response has { user: {...} }
+  return data.user; 
 };
 
 const profileService = {
