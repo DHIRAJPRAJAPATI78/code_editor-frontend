@@ -59,9 +59,6 @@ export const registerForContest = createAsyncThunk(
       const res = await API.post(
         `/${id}/register`,
         {},
-        {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-        }
       );
       return res.data;
     } catch (err) {

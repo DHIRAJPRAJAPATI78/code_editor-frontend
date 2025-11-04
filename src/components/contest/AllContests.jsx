@@ -100,13 +100,18 @@ export default function AllContests() {
               </span>
             </div>
 
-            <Link
+           { contest.status ==="upcoming" ? <Link
               to={`/contests/${contest._id}`}
               className='w-full block bg-yellow-500 hover:bg-yellow-400 text-black py-2 rounded-lg font-semibold transition  text-center'
             >
-              {" "}
-              View Details
-            </Link>
+         Register Now
+            </Link>:
+              <Link
+              to={`/contests/${contest._id}`}
+              className='w-full block bg-yellow-500 hover:bg-yellow-400 text-black py-2 rounded-lg font-semibold transition  text-center'
+            >
+          view Details
+            </Link>}
           </motion.div>
         ))}
       </div>
