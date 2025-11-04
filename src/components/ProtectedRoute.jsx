@@ -2,6 +2,7 @@ import { Outlet, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import Login from "./Login";
 
 
 const ProtectedRoute = () => {

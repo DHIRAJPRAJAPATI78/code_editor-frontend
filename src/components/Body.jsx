@@ -7,23 +7,14 @@ import { getUserProfile } from "../features/profile/profileSlice";
 const Body = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const { user,  isError, message } = useSelector(
-    (state) => state.profile
-  );
+  const { user } = useSelector((state) => state.profile);
 
   useEffect(() => {
     if (!user) {
-      dispatch(getUserProfile());
+      dispatch(getUserProfile({ navigate })); 
     }
-  }, [user, dispatch]);
+  }, [user, dispatch, navigate]);
 
-  useEffect(() => {
-    if (isError) {
-      console.error("Profile fetch failed:", message);
-      navigate("/home"); 
-    }
-  }, [isError, message, navigate]);
 
   return (
     <div>

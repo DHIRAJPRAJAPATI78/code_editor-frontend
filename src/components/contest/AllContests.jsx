@@ -101,7 +101,7 @@ export default function AllContests() {
             </div>
 
             <Link
-              to={`/contest/${contest._id}`}
+              to={`/contests/${contest._id}`}
               className='w-full block bg-yellow-500 hover:bg-yellow-400 text-black py-2 rounded-lg font-semibold transition  text-center'
             >
               {" "}

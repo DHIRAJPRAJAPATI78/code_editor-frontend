@@ -41,6 +41,7 @@ export const fetchContestById = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const res = await API.get(`/${id}`);
+      console.log(res);
       return res.data;
     } catch (err) {
       return rejectWithValue(

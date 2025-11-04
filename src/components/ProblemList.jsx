@@ -135,9 +135,11 @@ export default function ProblemList() {
   const solvedDates = ["2025-10-14", "2025-10-17", "2025-10-19"];
   const contestDates = ["2025-10-21", "2025-10-27"];
 
-  // ✅ Fetch problems from API on mount
+  
   useEffect(() => {
-    dispatch(getProblemList());
+    if (!problems || problems.length === 0){
+      dispatch(getProblemList());
+    }
   }, [dispatch]);
 
   const filteredProblems = problems?.filter((p) => {

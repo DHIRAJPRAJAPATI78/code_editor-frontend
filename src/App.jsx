@@ -11,6 +11,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ProfilePage from "./components/ProfilePage";
 import UpdateProfile from "./components/profile _components/updateProfile";
 import { Toaster } from "react-hot-toast";
+import ContestDetails from "./components/contest/ContestDetails";
 
 
 const App = () => {
@@ -29,9 +30,10 @@ const App = () => {
               <Route path="/problems" element={<ProblemList />} />
               <Route path="/problems/:id" element={<ProblemPage />} />
               <Route path="/contests" element={<Contest />} />
+              <Route path="/contests/:contestId" element={<ContestDetails />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/profile/update" element={<UpdateProfile />} />
-              
+              <Route path="/contests/:cid/problems/:id" element={<ProblemPage/>}/>
             </Route>
 
             <Route path="*" element={<h2>404 - Page Not Found</h2>} />

@@ -3,18 +3,17 @@ import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserProfile } from "../../features/profile/profileSlice";
 import { Edit3, Calendar, User, Mail } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function ProfileSidebar() {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const { user, isLoading, isError, message } = useSelector((state) => state.profile);
   const { problems: totalProblems } = useSelector((state) => state.problem);
-
   useEffect(() => {
-    dispatch(getUserProfile());
-  }, [dispatch]);
+    dispatch(getUserProfile(navigate));
+  }, [dispatch,navigate]);
 
-  // ✅ Dynamically compute skills from problem list
   const dynamicSkills = useMemo(() => {
     if (!totalProblems || totalProblems.length === 0) return null;
 

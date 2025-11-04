@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 
 export default function Home() {
@@ -98,12 +99,9 @@ export default function Home() {
         </p>
 
         <div className='mt-10 flex flex-col sm:flex-row gap-4 justify-center'>
-          <button className='px-8 py-3 bg-gradient-to-r from-purple-500 to-purple-700 rounded-lg font-semibold hover:scale-[1.03] transition-transform duration-300 shadow-lg shadow-purple-800/30'>
-            Login as Student
-          </button>
-          <button className='px-8 py-3 border border-purple-500/50 rounded-lg font-semibold hover:bg-purple-600/20 hover:scale-[1.03] transition-all duration-300'>
-            Login as Admin
-          </button>
+          <Link to="/login" className='block px-8 py-3 bg-gradient-to-r from-purple-500 to-purple-700 rounded-lg font-semibold hover:scale-[1.03] transition-transform duration-300 shadow-lg shadow-purple-800/30'>
+            Login / Register 
+          </Link>
         </div>
 
         <p className='mt-10 text-md md:text-lg text-rose-500 italic'>

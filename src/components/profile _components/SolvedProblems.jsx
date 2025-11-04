@@ -3,17 +3,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo } from "react";
 import { getAllSolvedProblems } from "../../features/solvedProblem/solvedSlice";
 import { Target, TrendingUp, Clock } from "lucide-react";
+import { getProblemList } from "../../features/Problem/problemSlice";
 
 export default function SolvedStats() {
   const dispatch = useDispatch();
-
   const { problems: solvedProblems, isLoading, isError, message } = useSelector(
     (state) => state.solved
   );
   const { problems: totalProblems } = useSelector((state) => state.problem);
 
   useEffect(() => {
-    dispatch(getAllSolvedProblems());
+    if(!totalProblems || totalProblems.length===0){
+      dispatch(getProblemList())
+      console.log("totl");
+    }
+    if(solvedProblems.length === 0){
+      dispatch(getAllSolvedProblems());
+      console.log("object");
+    }
   }, [dispatch]);
 
   // ✅ Compute stats dynamically using Redux data

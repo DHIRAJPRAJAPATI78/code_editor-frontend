@@ -19,7 +19,8 @@ import CustomModal from "../utils/CustomModal";
 import { submitCode } from "../features/submit/submitSlice";
 import SubmissionTab from "./SubmissionTab";
 const ProblemPage = () => {
-  const { id } = useParams();
+  const { cid,id } = useParams();
+  console.log(cid,id);
   const dispatch = useDispatch();
   const { currentProblem, loading, error } = useSelector(
     (state) => state.problem
@@ -98,7 +99,7 @@ const ProblemPage = () => {
 
     // ✅ Dispatch and unwrap the result
     const payload = await dispatch(
-      submitCode({ problemId: id, language, code })
+      submitCode({ problemId: id, language, code,contestId:cid })
     ).unwrap();
 
     // Success modal
@@ -115,7 +116,7 @@ const ProblemPage = () => {
     setModal({
       isOpen: true,
       title: "Error",
-      message: err?.message || "Submission failed due to a network or server error.",
+      message: err||err?.message || "Submission failed due to a network or server error.",
       type: "error",
     });
   } finally {
