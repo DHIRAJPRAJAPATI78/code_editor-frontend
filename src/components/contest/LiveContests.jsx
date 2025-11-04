@@ -3,21 +3,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchLiveContests } from "../../features/contest/contestSlice";
 import { Flame, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
-fetch
+
 export default function LiveContests() {
   const dispatch = useDispatch();
   const { liveContests, loading } = useSelector((state) => state.contest);
 
   useEffect(() => {
+    if(!liveContests || liveContests.length===0)
     dispatch(fetchLiveContests());
   }, [dispatch]);
 
   return (
     <div className="bg-[#0a0a0f] min-h-screen text-gray-200 p-6">
-      <h1 className="text-3xl font-bold text-yellow-400 mb-6 flex items-center gap-2">
-        <Flame className="text-yellow-400" /> Live Contests
-      </h1>
-
       {loading ? (
         <div className="flex justify-center items-center h-80 text-yellow-400">
           <Loader2 className="animate-spin w-8 h-8" /> Loading...

@@ -12,6 +12,7 @@ export default function AllContests() {
   );
 
   useEffect(() => {
+    if(!contests || contests.length===0)
     dispatch(fetchAllContests({ page: currentPage, limit: 10 }));
   }, [dispatch, currentPage]);
 
@@ -101,7 +102,7 @@ export default function AllContests() {
             </div>
 
            { contest.status ==="upcoming" ? <Link
-              to={`/contests/${contest._id}`}
+              to={`/contests/${contest._id}/register`}
               className='w-full block bg-yellow-500 hover:bg-yellow-400 text-black py-2 rounded-lg font-semibold transition  text-center'
             >
          Register Now

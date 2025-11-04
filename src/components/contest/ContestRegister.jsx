@@ -8,10 +8,11 @@ import {
   clearRegisterMessage,
 } from "../../features/contest/contestSlice";
 import { motion } from "framer-motion";
-import { Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Loader2, Info } from "lucide-react";
+import toast, { Toaster } from "react-hot-toast";
 
 const ContestRegister = () => {
-  const { id } = useParams();
+  const { contestId } = useParams();
   const dispatch = useDispatch();
 
   const { contestDetails, loading, error, registerMessage } = useSelector(
@@ -19,16 +20,51 @@ const ContestRegister = () => {
   );
 
   useEffect(() => {
-    dispatch(fetchContestById(id));
+    if(!contestDetails)
+    dispatch(fetchContestById(contestId));
 
     return () => {
       dispatch(clearContestError());
       dispatch(clearRegisterMessage());
     };
-  }, [id, dispatch]);
+  }, [contestId, dispatch]);
 
-  const handleRegister = () => {
-    dispatch(registerForContest({ id }));
+  // Show toast when registerMessage or error changes
+  useEffect(() => {
+    if (registerMessage) {
+      toast.success(registerMessage, {
+        style: {
+          background: "#1a1f2c",
+          color: "#d4d4d4",
+          border: "1px solid #22c55e",
+        },
+        iconTheme: {
+          primary: "#22c55e",
+          secondary: "#1a1f2c",
+        },
+      });
+      dispatch(clearRegisterMessage());
+    }
+
+    if (error) {
+      toast.error(error, {
+        style: {
+          background: "#1a1f2c",
+          color: "#d4d4d4",
+          border: "1px solid #ef4444",
+        },
+        iconTheme: {
+          primary: "#ef4444",
+          secondary: "#1a1f2c",
+        },
+      });
+      dispatch(clearContestError());
+    }
+  }, [registerMessage, error, dispatch]);
+
+  const handleRegister = (e) => {
+    e.preventDefault();
+    dispatch(registerForContest( contestId ));
   };
 
   if (loading) {
@@ -51,14 +87,17 @@ const ContestRegister = () => {
 
   return (
     <motion.div
-      className="min-h-screen bg-[#0d1117] flex flex-col items-center text-gray-100 px-4 py-10"
+      className="min-h-screen bg-[#0d1117] flex flex-col items-center text-gray-100 px-4 pt-20 pb-12"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
     >
+      {/* Toast Container */}
+      <Toaster position="top-center" reverseOrder={false} />
+
       {/* Card */}
       <motion.div
-        className="bg-[#161b22] w-full max-w-2xl rounded-2xl shadow-lg p-8 border border-gray-700"
+        className="bg-[#161b22] w-full max-w-3xl rounded-2xl shadow-lg p-8 border border-gray-700"
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.1 }}
@@ -77,6 +116,43 @@ const ContestRegister = () => {
           </div>
         </div>
 
+        {/* Guidelines Section */}
+        <div className="bg-[#0f1620] border border-gray-700 rounded-xl p-6 mb-8">
+          <div className="flex items-center gap-2 mb-3">
+            <Info className="text-yellow-400 w-5 h-5" />
+            <h2 className="text-xl font-semibold text-yellow-400">
+              Contest Guidelines
+            </h2>
+          </div>
+
+          <ul className="list-disc list-inside space-y-2 text-gray-300 text-sm">
+            <li>
+              The contest includes <strong>4 coding problems</strong> of varying
+              difficulty.
+            </li>
+            <li>
+              Duration: <strong>90 minutes</strong>.
+            </li>
+            <li>
+              Allowed languages: C++, Java, Python, and JavaScript.
+            </li>
+            <li>
+              Submissions are evaluated automatically using hidden test cases.
+            </li>
+            <li>
+              Any form of plagiarism will lead to immediate disqualification.
+            </li>
+            <li>
+              Rankings are based on the <strong>number of solved problems</strong> and{" "}
+              <strong>total time taken</strong>.
+            </li>
+            <li>
+              Registered users can access this contest from the{" "}
+              <strong>“My Contests”</strong> section.
+            </li>
+          </ul>
+        </div>
+
         {/* Register button */}
         <div className="flex justify-center">
           <motion.button
@@ -89,22 +165,6 @@ const ContestRegister = () => {
             {loading ? "Processing..." : "Register for Contest"}
           </motion.button>
         </div>
-
-        {/* Success Message */}
-        {registerMessage && (
-          <div className="mt-6 flex items-center gap-2 text-green-400 bg-green-900/30 border border-green-800 p-3 rounded-lg">
-            <CheckCircle2 className="w-5 h-5" />
-            <span>{registerMessage}</span>
-          </div>
-        )}
-
-        {/* Error Message */}
-        {error && (
-          <div className="mt-6 flex items-center gap-2 text-red-400 bg-red-900/30 border border-red-800 p-3 rounded-lg">
-            <AlertCircle className="w-5 h-5" />
-            <span>{error}</span>
-          </div>
-        )}
       </motion.div>
     </motion.div>
   );

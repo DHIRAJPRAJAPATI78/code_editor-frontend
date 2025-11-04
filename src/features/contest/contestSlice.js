@@ -54,7 +54,7 @@ export const fetchContestById = createAsyncThunk(
 
 export const registerForContest = createAsyncThunk(
   "contest/register",
-  async ({ id, token }, { rejectWithValue }) => {
+  async ( id , { rejectWithValue }) => {
     try {
       const res = await API.post(
         `/${id}/register`,
