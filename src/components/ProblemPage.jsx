@@ -19,8 +19,8 @@ import CustomModal from "../utils/CustomModal";
 import { submitCode } from "../features/submit/submitSlice";
 import SubmissionTab from "./SubmissionTab";
 const ProblemPage = () => {
-  const { cid,id } = useParams();
-  console.log(cid,id);
+  const { cid, id } = useParams();
+  console.log(cid, id);
   const dispatch = useDispatch();
   const { currentProblem, loading, error } = useSelector(
     (state) => state.problem
@@ -75,55 +75,57 @@ const ProblemPage = () => {
   };
 
   const handleSubmit = async () => {
-  if (!id) {
-    return setModal({
-      isOpen: true,
-      title: "Error",
-      message: "Problem not found!",
-      type: "error",
-    });
-  }
+    if (!id) {
+      return setModal({
+        isOpen: true,
+        title: "Error",
+        message: "Problem not found!",
+        type: "error",
+      });
+    }
 
-  if (!hasRun) {
-    return setModal({
-      isOpen: true,
-      title: "Warning",
-      message: "Please run the code before submitting!",
-      type: "error",
-    });
-  }
+    if (!hasRun) {
+      return setModal({
+        isOpen: true,
+        title: "Warning",
+        message: "Please run the code before submitting!",
+        type: "error",
+      });
+    }
 
-  try {
-    setIsSubmitting(true);
-    dispatch(resetSubmission());
+    try {
+      setIsSubmitting(true);
+      dispatch(resetSubmission());
 
-    // ✅ Dispatch and unwrap the result
-    const payload = await dispatch(
-      submitCode({ problemId: id, language, code,contestId:cid })
-    ).unwrap();
+      // ✅ Dispatch and unwrap the result
+      const payload = await dispatch(
+        submitCode({ problemId: id, language, code, contestId: cid })
+      ).unwrap();
 
-    // Success modal
-    setModal({
-      isOpen: true,
-      title: "Success",
-      message: payload?.message || "Code submitted successfully!",
-      type: "success",
-    });
+      // Success modal
+      setModal({
+        isOpen: true,
+        title: "Success",
+        message: payload?.message || "Code submitted successfully!",
+        type: "success",
+      });
 
-    setActiveTab("submission");
-  } catch (err) {
-    console.error(err);
-    setModal({
-      isOpen: true,
-      title: "Error",
-      message: err||err?.message || "Submission failed due to a network or server error.",
-      type: "error",
-    });
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
+      setActiveTab("submission");
+    } catch (err) {
+      console.error(err);
+      setModal({
+        isOpen: true,
+        title: "Error",
+        message:
+          err ||
+          err?.message ||
+          "Submission failed due to a network or server error.",
+        type: "error",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleLeftResize = (e) => {
     e.preventDefault();
@@ -211,12 +213,12 @@ const ProblemPage = () => {
         style={{ width: leftPanelWidth }}
       >
         {/* Tabs */}
-        <div className='flex py-1 overflow-x-auto border-b border-[#2a2c34] bg-[#131518]'>
+        <div className='sticky top-0 z-20 flex overflow-x-auto overflow-y-hidden border-b border-[#2a2c34] bg-[#131518] pt-8 pb-5  items-center '>
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-3 text-md font-medium whitespace-nowrap transition-all duration-200 ${
+              className={`flex items-center gap-2 px-4 py-2 text-md font-medium whitespace-nowrap transition-all duration-200 ${
                 activeTab === tab.id
                   ? "text-[#ffa500] border-b-2 border-[#ffa500] bg-[#0e1116]"
                   : "text-[#d4d4d4] hover:text-[#ffa500]"
@@ -228,7 +230,7 @@ const ProblemPage = () => {
         </div>
 
         {/* Content */}
-        <div className='p-2 md:p-3 space-y-6'>
+        <div className='min-h-screen overflow-y-auto p-2 md:p-3 space-y-6 '>
           {activeTab === "statement" && (
             <>
               <h1 className='text-lg md:text-lg font-bold text-white mb-4'>
@@ -268,16 +270,17 @@ const ProblemPage = () => {
                     key={i}
                     className='bg-[#1b1d23] p-4 rounded-lg mb-3 border border-[#2a2c34]'
                   >
-                    <p className='text-sm mb-1'>
-                      <span className='text-[#82aaff] font-medium'>Input:</span>{" "}
+                    <p className='text-sm font-medium text-[#82aaff] '>Input:</p>
+                    <pre className='text-sm text-white whitespace-pre-wrap  p-2 rounded-md mt-1'>
                       {test.input}
+                    </pre>
+                    <br />
+                    <p className='text-sm font-medium text-[#c3e88d]'>
+                      Output:
                     </p>
-                    <p className='text-sm mb-1'>
-                      <span className='text-[#c3e88d] font-medium'>
-                        Output:
-                      </span>{" "}
+                    <pre className='text-sm text-white whitespace-pre-wrap  p-2 rounded-md mt-1'>
                       {test.output}
-                    </p>
+                    </pre>
                     {test.explanation && (
                       <p className='text-sm text-gray-300 italic'>
                         Explation : {test.explanation}
@@ -331,7 +334,7 @@ const ProblemPage = () => {
               )}
             </div>
           )}
-          {activeTab === "submission" && <SubmissionTab problemId={id}/>}
+          {activeTab === "submission" && <SubmissionTab problemId={id} />}
         </div>
       </div>
 
