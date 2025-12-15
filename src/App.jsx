@@ -13,6 +13,7 @@ import UpdateProfile from "./components/profile _components/updateProfile";
 import { Toaster } from "react-hot-toast";
 import ContestDetails from "./components/contest/ContestDetails";
 import ContestRegister from "./components/contest/ContestRegister";
+import MySubmissions from "./components/submission/MySubmissions";
 
 const App = () => {
 
@@ -35,6 +36,7 @@ const App = () => {
               <Route path="/profile/update" element={<UpdateProfile />} />
               <Route path="/contests/:cid/problems/:id" element={<ProblemPage/>}/>
               <Route path="/contests/:contestId/register" element={<ContestRegister/>}/>
+              <Route path="/submissions" element={<MySubmissions/>}/>
             </Route>
 
             <Route path="*" element={<h2>404 - Page Not Found</h2>} />

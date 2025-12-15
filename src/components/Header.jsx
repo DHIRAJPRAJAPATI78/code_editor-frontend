@@ -2,14 +2,15 @@
 
 import { useEffect, useState, useRef } from "react";
 import { Menu, X, Bell, Moon } from "lucide-react";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser, reset } from "../features/auth/authSlice";
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   // ✅ Get user from Redux
   const { user } = useSelector((state) => state.profile);
 
@@ -24,13 +25,21 @@ const Header = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // ✅ Logout handler
+    const handleLogout = async () => {
+    await dispatch(logoutUser());
+    dispatch(reset());
+    setDropdownOpen(false);
+    setMenuOpen(false);
+    navigate("/login");
+  };
   // ✅ Navigation links
   const navLinks = [
     { name: "Problems", href: "/problems" },
     { name: "Contests", href: "/contests" },
     { name: "Leaderboard", href: "/leaderboard" },
     { name: "Settings", href: "/settings", type: "mobile" },
-    { name: "Logout", href: "/logout", type: "mobile" },
+    { name: "Logout", href: "", type: "mobile" },
     { name: "Submissions", href: "/submissions", type: "mobile" },
     { name: "My Profile", href: "/profile", type: "mobile" },
   ];
@@ -103,12 +112,13 @@ const Header = () => {
                         My Profile</Link>
                       </li>
                       <li className="px-4 py-2 hover:bg-gray-800 cursor-pointer">
-                        Submissions
+                        <Link to="/submissions">
+                        Submissions</Link>
                       </li>
                       <li className="px-4 py-2 hover:bg-gray-800 cursor-pointer">
                         Settings
                       </li>
-                      <li className="px-4 py-2 hover:bg-gray-800 cursor-pointer text-red-400">
+                      <li className="px-4 py-2 hover:bg-gray-800 cursor-pointer text-red-400"   onClick={()=>handleLogout()}>
                         Logout
                       </li>
                     </ul>
