@@ -14,6 +14,9 @@ import { Toaster } from "react-hot-toast";
 import ContestDetails from "./components/contest/ContestDetails";
 import ContestRegister from "./components/contest/ContestRegister";
 import MySubmissions from "./components/submission/MySubmissions";
+import Leaderboard from "./components/LeaderBoard.jsx/Board";
+import Setting from "./components/settings/Setting";
+import Bookmarks from "./components/Boookmarks/Bookmarks";
 
 const App = () => {
 
@@ -37,6 +40,9 @@ const App = () => {
               <Route path="/contests/:cid/problems/:id" element={<ProblemPage/>}/>
               <Route path="/contests/:contestId/register" element={<ContestRegister/>}/>
               <Route path="/submissions" element={<MySubmissions/>}/>
+              <Route path="/leaderboard" element={<Leaderboard/>} />
+              <Route path="/settings" element={<Setting/>} />
+              <Route path="/bookmarks" element={<Bookmarks/>} />
             </Route>
 
             <Route path="*" element={<h2>404 - Page Not Found</h2>} />

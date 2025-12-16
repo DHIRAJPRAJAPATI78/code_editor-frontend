@@ -11,10 +11,10 @@ const Header = () => {
   const dropdownRef = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // ✅ Get user from Redux
+  //  Get user from Redux
   const { user } = useSelector((state) => state.profile);
 
-  // ✅ Close dropdown when clicking outside
+  //  Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -25,7 +25,7 @@ const Header = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // ✅ Logout handler
+  //  Logout handler
     const handleLogout = async () => {
     await dispatch(logoutUser());
     dispatch(reset());
@@ -33,7 +33,7 @@ const Header = () => {
     setMenuOpen(false);
     navigate("/login");
   };
-  // ✅ Navigation links
+  //  Navigation links
   const navLinks = [
     { name: "Problems", href: "/problems" },
     { name: "Contests", href: "/contests" },
@@ -41,6 +41,7 @@ const Header = () => {
     { name: "Settings", href: "/settings", type: "mobile" },
     { name: "Logout", href: "", type: "mobile" },
     { name: "Submissions", href: "/submissions", type: "mobile" },
+    { name: "Bookmark", href: "/bookmarks" },
     { name: "My Profile", href: "/profile", type: "mobile" },
   ];
 
@@ -116,7 +117,8 @@ const Header = () => {
                         Submissions</Link>
                       </li>
                       <li className="px-4 py-2 hover:bg-gray-800 cursor-pointer">
-                        Settings
+                        <Link to="/settings">
+                        Settings</Link>
                       </li>
                       <li className="px-4 py-2 hover:bg-gray-800 cursor-pointer text-red-400"   onClick={()=>handleLogout()}>
                         Logout
