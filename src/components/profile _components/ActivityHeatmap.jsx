@@ -14,7 +14,7 @@ export default function ActivityHeatmap() {
     const fetchHeatmap = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/user/track/activity?year=${year}`,
+          `https://algoken.onrender.com/user/track/activity?year=${year}`,
           { withCredentials: true }
         );
         setHeatmap(res.data);

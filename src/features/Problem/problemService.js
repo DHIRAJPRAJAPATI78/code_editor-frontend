@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/user"; // adjust if needed
+const API_URL = "https://algoken.onrender.com/user"; // adjust if needed
 
 // Get all problems
 const problem = async () => {

@@ -6,7 +6,7 @@ export const getAllSolvedProblems = createAsyncThunk(
   "solved/getAllSolvedProblems",
   async (_, thunkAPI) => {
     try {
-      const res = await axios.get("http://localhost:3000/user/Allproblem/solved", { withCredentials: true });
+      const res = await axios.get("https://algoken.onrender.com/user/Allproblem/solved", { withCredentials: true });
       return res.data.problems;
     } catch (error) {
       const message =

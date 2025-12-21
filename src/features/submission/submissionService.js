@@ -1,7 +1,7 @@
 
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = "https://algoken.onrender.com";
 
 export const submitCodeService = async (problemId, language, code) => {
  

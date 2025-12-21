@@ -1,7 +1,7 @@
 // src/features/profile/profileService.js
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/user/profile";
+const API_URL = "https://algoken.onrender.com/user/profile";
 
 // ✅ Fetch logged-in user's profile
 const getUserProfile = async () => {

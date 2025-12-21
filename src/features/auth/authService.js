@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/user";
-
+const API_URL = "https://algoken.onrender.com/user";
+// https://algoken.onrender.com
 // Register user
 const register = async (userData) => {
   const res = await axios.post(`${API_URL}/register`, userData, { withCredentials: true });

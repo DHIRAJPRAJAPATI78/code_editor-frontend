@@ -11,7 +11,7 @@ const ProtectedRoute = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        await axios.get("http://localhost:3000/auth/check", {
+        await axios.get("https://algoken.onrender.com/auth/check", {
           withCredentials: true,
         });
         setStatus("authorized");

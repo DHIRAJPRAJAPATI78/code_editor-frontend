@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 
-const API_URL = "http://localhost:3000/submit/user/all-submission";
+const API_URL = "https://algoken.onrender.com/submit/user/all-submission";
 
 export default function MySubmissions() {
   const [submissions, setSubmissions] = useState([]);
