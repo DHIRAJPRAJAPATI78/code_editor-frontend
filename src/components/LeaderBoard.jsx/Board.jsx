@@ -3,7 +3,7 @@ import { Trophy, Sparkles } from "lucide-react";
 
 export default function Leaderboard() {
   return (
-    <div className="flex min-h-[60vh] items-center justify-center px-4 pt-17">
+    <div className="flex min-h-[60vh] items-center justify-center px-4 mt-17">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
