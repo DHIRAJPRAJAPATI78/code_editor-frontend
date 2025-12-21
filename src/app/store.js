@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "../features/auth/authSlice";
 import problemReducer from "../features/Problem/problemSlice";
-import runReducer from "../features/Submission/submissionSlice";
+import runReducer from "../features/submission/submissionSlice";
 import subbmissionReducer from "../features/submit/submitSlice";
 import profileReducer from "../features/profile/profileSlice";
 import solvedReducer from "../features/solvedProblem/solvedSlice";
