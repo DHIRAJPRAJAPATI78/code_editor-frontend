@@ -53,7 +53,7 @@ const Header = () => {
           to="/"
           className="text-2xl font-bold text-white tracking-wide hover:text-purple-400 transition-colors"
         >
-          Codex
+          AlgoKen
         </Link>
 
         {/* Desktop Navigation */}
