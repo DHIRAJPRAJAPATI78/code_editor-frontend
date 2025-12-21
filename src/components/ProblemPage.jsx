@@ -14,7 +14,7 @@ import { getProblemById } from "../features/Problem/problemSlice";
 import {
   runCode,
   resetSubmission,
-} from "../features/Submission/submissionSlice";
+} from "../features/submission/submissionSlice";
 import CustomModal from "../utils/CustomModal";
 import { submitCode } from "../features/submit/submitSlice";
 import SubmissionTab from "./SubmissionTab";
