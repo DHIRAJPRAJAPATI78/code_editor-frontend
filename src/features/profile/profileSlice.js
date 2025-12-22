@@ -3,21 +3,15 @@ import profileService from "./profileService";
 
 export const getUserProfile = createAsyncThunk(
   "profile/getUserProfile",
-  async (arg, thunkAPI) => {
-    const { navigate } = arg; 
+  async (_, thunkAPI) => {
     try {
       return await profileService.getUserProfile();
     } catch (error) {
       const status = error.response?.status;
       const message =
         error.response?.data?.message ||
-        error.message ||
+        error.message || status||
         "Failed to fetch profile";
-
-      if (status == 401 && navigate) {
-        navigate("/login"); 
-      }
-
       return thunkAPI.rejectWithValue(message);
     }
   }
@@ -27,7 +21,7 @@ const profileSlice = createSlice({
   name: "profile",
   initialState: {
     user: null,
-    isLoading: false,
+    isLoading: true,
     isError: false,
     message: "",
   },
@@ -48,6 +42,7 @@ const profileSlice = createSlice({
         console.log(action.payload);
         state.isLoading = false;
         state.user = action.payload;
+         state.isError = false
       })
       .addCase(getUserProfile.rejected, (state, action) => {
         state.isLoading = false;

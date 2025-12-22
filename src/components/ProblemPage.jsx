@@ -97,7 +97,7 @@ const ProblemPage = () => {
       setIsSubmitting(true);
       dispatch(resetSubmission());
 
-      // ✅ Dispatch and unwrap the result
+      //  Dispatch and unwrap the result
       const payload = await dispatch(
         submitCode({ problemId: id, language, code, contestId: cid })
       ).unwrap();
@@ -206,7 +206,7 @@ const ProblemPage = () => {
   ];
 
   return (
-    <div className='pt-16 h-screen flex bg-[#0e1116] text-[#d4d4d4]'>
+    <div className='pt-16 h-screen flex  bg-[#0e1116] text-[#d4d4d4]'>
       {/* LEFT SIDE */}
       <div
         className='flex flex-col border-r border-[#2a2c34] overflow-y-auto'

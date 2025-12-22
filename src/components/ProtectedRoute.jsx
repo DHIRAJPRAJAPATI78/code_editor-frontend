@@ -1,47 +1,16 @@
-import { Outlet, Navigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { motion } from "framer-motion";
-import Login from "./Login";
+
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 
 
-const ProtectedRoute = () => {
-  const [status, setStatus] = useState("checking");
+export default function Protectedroute({ children }) {
+  const { isError } = useSelector((state) => state.profile);
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        await axios.get("https://algoken.onrender.com/auth/check", {
-          withCredentials: true,
-        });
-        setStatus("authorized");
-      } catch (err) {
-        setStatus("unauthorized");
-      }
-    };
-    checkAuth();
-  }, []);
+  console.log(isError);
 
- 
- 
-  if (status === "authorized") {
-    return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.4 }}
-      >
-        <Outlet />
-      </motion.div>
-    );
+  if (isError) {
+    console.log(`object`);
+    return <Navigate to='/login' replace />;
   }
-
-
-  if (status === "unauthorized") {
-    return <Navigate to="/login" replace />;
-  }
-
-  return null;
-};
-
-export default ProtectedRoute;
+  return children;
+}

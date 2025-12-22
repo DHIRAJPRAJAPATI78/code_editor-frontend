@@ -47,7 +47,7 @@ const UpdateProfile = () => {
 
     setIsLoading(true);
     try {
-      const res = await axios.put("http://localhost:3000/user/profile/update", formData, {
+      const res = await axios.put("https://algoken.onrender.com/user/profile/update", formData, {
         withCredentials: true,
       });
       toast.success(res.data.message || "Profile updated!");

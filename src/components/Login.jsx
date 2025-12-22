@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, registerUser, reset } from "../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
+import { getUserProfile } from "../features/profile/profileSlice";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -22,12 +23,14 @@ export default function Login() {
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     if (activeTab === "login") {
-      dispatch(loginUser(formData));
+      await dispatch(loginUser(formData)).unwrap();
+      dispatch(getUserProfile());
     } else {
-      dispatch(registerUser(formData));
+      await dispatch(registerUser(formData)).unwrap();
+      dispatch(getUserProfile());
     }
   };
 
