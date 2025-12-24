@@ -112,11 +112,14 @@ const submitSlice = createSlice({
       .addCase(getUserSubmissionsByProblem.fulfilled, (state, action) => {
         state.isFetching = false;
         state.problemSubmissions = action.payload.submissions;
+        state.message = ""; 
+        state.isError = false
       })
       .addCase(getUserSubmissionsByProblem.rejected, (state, action) => {
         state.isFetching = false;
         state.isError = true;
         state.message = action.payload;
+        state.problemSubmissions=[]
       });
   },
 });

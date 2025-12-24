@@ -140,7 +140,7 @@ export default function ProblemList() {
   const {contests}=useSelector(state=>state.contest)
   useEffect(()=>{
     if(!contests || contests.length===0)
-      dispatch(fetchAllContests())      
+      dispatch(fetchAllContests({page:1,limit:10}))      
   },[])
   console.log(contests);
   const { problems, isLoading, isError, message } = useSelector(
