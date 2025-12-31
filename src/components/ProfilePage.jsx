@@ -8,7 +8,7 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-layer-1 dark:bg-dark-layer-1 text-gray-100">
       <div className="max-w-9xl mx-auto px-2  py-17">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-25 ">
+        <div className="grid grid-cols-1 lg:grid-cols-12 sm:gap-25 gap-4">
           {/* Sidebar - Fixed */}
           <div className="lg:col-span-3  ">
             <ProfileSidebar />
