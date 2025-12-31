@@ -7,15 +7,15 @@ import SolvedStats from "./profile _components/SolvedProblems";
 export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-layer-1 dark:bg-dark-layer-1 text-gray-100">
-      <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 py-17">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="max-w-9xl mx-auto px-2  py-17">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-25 ">
           {/* Sidebar - Fixed */}
           <div className="lg:col-span-3  ">
             <ProfileSidebar />
           </div>
 
           {/* Main Content - Scrollable */}
-          <div className="lg:col-span-9 space-y-8 min-h-screen ">
+          <div className="lg:col-span-9 space-y-4 min-h-screen ">
             {/* Activity Heatmap */}
             <motion.section
               initial={{ opacity: 0, y: 20 }}
