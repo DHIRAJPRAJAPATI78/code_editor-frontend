@@ -80,7 +80,6 @@ const Header = () => {
           to='/'
           className='flex items-center gap-2 text-2xl font-bold text-purple-400'
         >
-          <Shield size={22} />
           AlgoKen
         </Link>
 
