@@ -11,6 +11,7 @@ export default function ProfileSidebar() {
   const { user, isLoading, isError, message } = useSelector((state) => state.profile);
   const { problems: totalProblems } = useSelector((state) => state.problem);
   useEffect(() => {
+    if(!user)
     dispatch(getUserProfile(navigate));
   }, [dispatch,navigate]);
 

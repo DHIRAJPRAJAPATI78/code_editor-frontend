@@ -169,7 +169,7 @@ const Header = () => {
               </Link>)
             ))}
 
-            {user && (
+            {user ? (
               <>
                 <div className='h-px bg-gray-800 my-2' />
 
@@ -180,7 +180,12 @@ const Header = () => {
                   Logout
                 </button>
               </>
-            )}
+            ):(<Link
+              to='/login'
+              className='bg-purple-600 px-4 py-2 rounded text-white'
+            >
+              Login
+            </Link>)}
           </div>
         </div>
       )}
